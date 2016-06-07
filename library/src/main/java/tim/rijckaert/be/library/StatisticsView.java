@@ -6,10 +6,9 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * Created by trijckaert on 08.06.16.
+ * Created by tim on 08.06.16.
  */
 public class StatisticsView extends View {
-
     public StatisticsView(final Context context) {
         this(context, null);
     }
