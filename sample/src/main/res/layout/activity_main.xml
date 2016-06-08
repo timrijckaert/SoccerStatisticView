@@ -1,33 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="tim.rijckaert.be.statisticsview.MainActivity">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            tools:context="tim.rijckaert.be.statisticsview.MainActivity">
 
-    <!--<tim.rijckaert.be.library.StatisticsView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content" />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <!--<tim.rijckaert.be.library.ValueBar-->
-        <!--android:id="@+id/valueBar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--custom:barHeight="20dp"-->
-        <!--custom:baseColor="@color/colorAccent"-->
-        <!--custom:circleRadius="5dp"-->
-        <!--custom:spaceAfterBar="10dp"-->
-        <!--custom:circleTextColor="@android:color/white"-->
-        <!--custom:circleTextSize="12sp"-->
-        <!--custom:fillColor="@color/colorPrimary"-->
-        <!--custom:labelText="Dit suckt"-->
-        <!--custom:labelTextColor="@android:color/black"-->
-        <!--custom:labelTextSize="12sp"-->
-        <!--custom:maxValueTextColor="@android:color/black"-->
-        <!--custom:maxValueTextSize="16sp"/>-->
-</RelativeLayout>
+        <tim.rijckaert.be.library.StatisticsView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</ScrollView>

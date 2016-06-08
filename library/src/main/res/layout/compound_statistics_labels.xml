@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/statisticsView_homeTeam_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            tools:text="60%"/>
+
+        <TextView
+            android:id="@+id/statisticsView_label_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            tools:text="Balbezit"/>
+
+        <TextView
+            android:id="@+id/statisticsView_awayTeam_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            tools:text="40%"/>
+    </LinearLayout>
+
+    <tim.rijckaert.be.library.SegmentedBarView
+        android:id="@+id/statisticsView_segmentedBarView"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:awayTeamValue="5"
+        app:colorAwayTeam="#179191"
+        app:colorFineLine="#F0EFEF"
+        app:colorHomeTeam="#7ED321"
+        app:colorIndifferent="#a4a4a4"
+        app:homeTeamValue="95"
+        app:isPercentageValue="true"
+        app:label="Balbezit" />
+
+</LinearLayout>

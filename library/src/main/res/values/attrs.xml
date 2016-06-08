@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="StatisticsView">
+    <declare-styleable name="SegmentedBarView">
         <attr name="colorHomeTeam" format="color" />
         <attr name="colorAwayTeam" format="color" />
         <attr name="colorIndifferent" format="color" />
         <attr name="colorFineLine" format="color" />
         <attr name="animated" format="boolean" />
-    </declare-styleable>
-
-    <declare-styleable name="ValueBar">
-        <attr name="barHeight" format="dimension" />
-        <attr name="circleRadius" format="dimension" />
-        <attr name="spaceAfterBar" format="dimension" />
-        <attr name="circleTextSize" format="dimension" />
-        <attr name="maxValueTextSize" format="dimension" />
-        <attr name="labelTextSize" format="dimension" />
-        <attr name="labelTextColor" format="color" />
-        <attr name="maxValueTextColor" format="color" />
-        <attr name="circleTextColor" format="color" />
-        <attr name="baseColor" format="color" />
-        <attr name="fillColor" format="color" />
-        <attr name="labelText" format="string" />
+        <attr name="label" format="string" />
+        <attr name="isPercentageValue" format="boolean" />
+        <attr name="homeTeamValue" format="integer" />
+        <attr name="awayTeamValue" format="integer" />
     </declare-styleable>
 </resources>
