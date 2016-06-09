@@ -40,13 +40,9 @@
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:awayTeamValue="5"
         app:colorAwayTeam="#179191"
         app:colorFineLine="#F0EFEF"
         app:colorHomeTeam="#7ED321"
-        app:colorIndifferent="#a4a4a4"
-        app:homeTeamValue="95"
-        app:isPercentageValue="true"
-        app:label="Balbezit" />
+        app:colorIndifferent="#a4a4a4" />
 
 </LinearLayout>

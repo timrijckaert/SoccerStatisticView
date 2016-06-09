@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.view.View;
  * Created by tim on 08.06.16.
  */
 public class SegmentedBarView extends View {
+
+    private Stat stat;
 
     //<editor-fold desc="Constants">
     private static final boolean DEFAULT_ABSOLUTE = false;
@@ -30,7 +33,6 @@ public class SegmentedBarView extends View {
     private final int awayTeamColor;
     private final int indifferentColor;
     private final int fineLineColor;
-    private final Stat stat;
     private final boolean isAnimated;
     //</editor-fold>
 
@@ -56,20 +58,12 @@ public class SegmentedBarView extends View {
         this.fineLineColor = obtainStyledAttributes.getColor(R.styleable.SegmentedBarView_colorFineLine, Color.GRAY);
         this.isAnimated = obtainStyledAttributes.getBoolean(R.styleable.SegmentedBarView_animated, DEFAULT_IS_ANIMATED);
 
-        final String label = obtainStyledAttributes.getString(R.styleable.SegmentedBarView_label);
-        final boolean isPercentageValue = obtainStyledAttributes.getBoolean(R.styleable.SegmentedBarView_isPercentageValue, DEFAULT_ABSOLUTE);
-        final int homeTeamValue = obtainStyledAttributes.getInteger(R.styleable.SegmentedBarView_homeTeamValue, DEFAULT_VALUE);
-        final int awayTeamValue = obtainStyledAttributes.getInteger(R.styleable.SegmentedBarView_awayTeamValue, DEFAULT_VALUE);
-        this.stat = new Stat(label, homeTeamValue, awayTeamValue, isPercentageValue ? Unit.PERCENTAGE : Unit.ABSOLUTE);
-
         obtainStyledAttributes.recycle();
         initViews();
     }
     //</editor-fold>
 
     private void initViews() {
-        checkPreconditionsAreSet();
-
         fineLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         fineLinePaint.setColor(fineLineColor);
 
@@ -83,39 +77,14 @@ public class SegmentedBarView extends View {
         awayRectPaint.setColor(awayTeamColor);
     }
 
-    private void checkPreconditionsAreSet() {
-        if (stat == null) {
-            throw new RuntimeException("Error! Stat object could not be instantiated. Did you fill the label?");
-        }
-
-        if (stat.getLabel() == null) {
-            throw new RuntimeException("Error! No label was set!");
-        }
-
-        if (stat.getHomeTeamValue() < 0 || stat.getAwayTeamValue() < 0) {
-            throw new RuntimeException("Error! the value should be bigger than 0");
-        }
-
-        if (stat.getUnit().equals(Unit.PERCENTAGE)) {
-            if (stat.getSum() != 100) {
-                throw new RuntimeException("Error! the home team value and away team value should add up to 100% if you are using the percentage unit");
-            }
-        }
+    public void updateView(@NonNull final Stat stat) {
+        this.stat = stat;
+        invalidate();
     }
 
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         setMeasuredDimension(widthMeasureSpec, measureHeight(heightMeasureSpec));
-    }
-
-    private int measureHeight(int measureSpec) {
-        int size = getPaddingTop() + getPaddingBottom();
-        size += getSizeInPixels(TypedValue.COMPLEX_UNIT_DIP, BAR_HEIGHT);
-        return resolveSizeAndState(size, measureSpec, 0);
-    }
-
-    private float getSizeInPixels(final int typedValueType, final int typedValue) {
-        return TypedValue.applyDimension(typedValueType, typedValue, getResources().getDisplayMetrics());
     }
 
     @Override
@@ -237,56 +206,15 @@ public class SegmentedBarView extends View {
         }
         return factor;
     }
+
+    private int measureHeight(int measureSpec) {
+        int size = getPaddingTop() + getPaddingBottom();
+        size += getSizeInPixels(TypedValue.COMPLEX_UNIT_DIP, BAR_HEIGHT);
+        return resolveSizeAndState(size, measureSpec, 0);
+    }
+
+    private float getSizeInPixels(final int typedValueType, final int typedValue) {
+        return TypedValue.applyDimension(typedValueType, typedValue, getResources().getDisplayMetrics());
+    }
     //</editor-fold>
-
-    enum Unit {
-        PERCENTAGE("%"),
-        ABSOLUTE("");
-
-        private final String extension;
-
-        Unit(final String extension) {
-            this.extension = extension;
-        }
-
-        private String getExtension() {
-            return extension;
-        }
-    }
-
-    public class Stat {
-        private final int sum;
-        private String label;
-        private int homeTeamValue;
-        private int awayTeamValue;
-        private Unit unit;
-
-        private Stat(final String label, final int homeTeamValue, final int awayTeamValue, final Unit unit) {
-            this.label = label;
-            this.homeTeamValue = homeTeamValue;
-            this.awayTeamValue = awayTeamValue;
-            this.sum = homeTeamValue + awayTeamValue;
-            this.unit = unit;
-        }
-
-        private String getLabel() {
-            return label;
-        }
-
-        private int getHomeTeamValue() {
-            return homeTeamValue;
-        }
-
-        private int getAwayTeamValue() {
-            return awayTeamValue;
-        }
-
-        private Unit getUnit() {
-            return unit;
-        }
-
-        private int getSum() {
-            return sum;
-        }
-    }
 }

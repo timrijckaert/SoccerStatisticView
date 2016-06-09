@@ -6,9 +6,5 @@
         <attr name="colorIndifferent" format="color" />
         <attr name="colorFineLine" format="color" />
         <attr name="animated" format="boolean" />
-        <attr name="label" format="string" />
-        <attr name="isPercentageValue" format="boolean" />
-        <attr name="homeTeamValue" format="integer" />
-        <attr name="awayTeamValue" format="integer" />
     </declare-styleable>
 </resources>

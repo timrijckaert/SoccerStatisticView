@@ -15,6 +15,22 @@
         android:orientation="vertical">
 
         <tim.rijckaert.be.library.StatisticsView
+            android:id="@+id/statisticsView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <tim.rijckaert.be.library.StatisticsView
+            android:id="@+id/statisticsView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <tim.rijckaert.be.library.StatisticsView
+            android:id="@+id/statisticsView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <tim.rijckaert.be.library.StatisticsView
+            android:id="@+id/statisticsView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>
