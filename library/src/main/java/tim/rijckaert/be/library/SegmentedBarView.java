@@ -24,7 +24,7 @@ public class SegmentedBarView extends View {
     private static final int FINE_BAR_HEIGHT = 3;
     private static final int BAR_HEIGHT = 8;
     private static final int SPACE_BETWEEN_GUIDES = 15;
-    private static final long ANIMATION_DURATION = 750l;
+    private static final long ANIMATION_DURATION = 750L;
     private final int homeTeamColor;
     //<editor-fold desc="Attributes">
 
@@ -179,7 +179,7 @@ public class SegmentedBarView extends View {
     }
 
     private ValueAnimator getAnimation(final boolean isHomeTeam, final double left, final double right, final int top, final int bottom) {
-        ValueAnimator valueAnimator = isHomeTeam ?
+        final ValueAnimator valueAnimator = isHomeTeam ?
                 ValueAnimator.ofFloat((float) right, (float) left) :
                 ValueAnimator.ofFloat((float) left, (float) right);
         valueAnimator.setDuration(ANIMATION_DURATION);
