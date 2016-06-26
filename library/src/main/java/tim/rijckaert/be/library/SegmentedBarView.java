@@ -1,5 +1,7 @@
 package tim.rijckaert.be.library;
 
+import android.animation.ValueAnimator;
+import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -10,38 +12,40 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 /**
  * Created by tim on 08.06.16.
  */
 public class SegmentedBarView extends View {
 
-    private Stat stat;
-
     //<editor-fold desc="Constants">
-    private static final boolean DEFAULT_ABSOLUTE = false;
-    private static final int DEFAULT_VALUE = 0;
-    private static final boolean DEFAULT_IS_ANIMATED = false;
-
+    private static final boolean DEFAULT_IS_ANIMATED = true;
     private static final int FINE_BAR_HEIGHT = 3;
     private static final int BAR_HEIGHT = 8;
-    private final int SPACE_BETWEEN_GUIDES = 15;
-    //</editor-fold>
-
-    //<editor-fold desc="Attributes">
+    private static final int SPACE_BETWEEN_GUIDES = 15;
+    private static final long ANIMATION_DURATION = 750l;
     private final int homeTeamColor;
+    //<editor-fold desc="Attributes">
+
+    //</editor-fold>
     private final int awayTeamColor;
-    private final int indifferentColor;
     private final int fineLineColor;
     private final boolean isAnimated;
+    private Stat stat;
     //</editor-fold>
 
     //<editor-fold desc="Paint">
     private Paint fineLinePaint;
     private Paint homeRectPaint;
     private Paint awayRectPaint;
-    private Paint indifferentPaint;
     //</editor-fold>
+
+    private ValueAnimator homeTeamValueAnimator;
+    private ValueAnimator awayTeamValueAnimator;
+
+    private RectF homeRectF;
+    private RectF awayRectF;
 
     //<editor-fold desc="Chaining Constructors">
     public SegmentedBarView(final Context context) {
@@ -54,7 +58,6 @@ public class SegmentedBarView extends View {
         final TypedArray obtainStyledAttributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SegmentedBarView, 0, 0);
         this.homeTeamColor = obtainStyledAttributes.getColor(R.styleable.SegmentedBarView_colorHomeTeam, Color.BLACK);
         this.awayTeamColor = obtainStyledAttributes.getColor(R.styleable.SegmentedBarView_colorAwayTeam, Color.GRAY);
-        this.indifferentColor = obtainStyledAttributes.getColor(R.styleable.SegmentedBarView_colorIndifferent, Color.GRAY);
         this.fineLineColor = obtainStyledAttributes.getColor(R.styleable.SegmentedBarView_colorFineLine, Color.GRAY);
         this.isAnimated = obtainStyledAttributes.getBoolean(R.styleable.SegmentedBarView_animated, DEFAULT_IS_ANIMATED);
 
@@ -66,9 +69,6 @@ public class SegmentedBarView extends View {
     private void initViews() {
         fineLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         fineLinePaint.setColor(fineLineColor);
-
-        indifferentPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        indifferentPaint.setColor(indifferentColor);
 
         homeRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         homeRectPaint.setColor(homeTeamColor);
@@ -94,8 +94,8 @@ public class SegmentedBarView extends View {
 
         drawGuideLines(canvas, halfCompleteWidth);
 
-        final RectF homeRectF = getRectF(true, halfCompleteWidth);
-        final RectF awayRectF = getRectF(false, halfCompleteWidth);
+        drawRect(true, halfCompleteWidth);
+        drawRect(false, halfCompleteWidth);
         drawSegmentedBarsValues(canvas, homeRectF, awayRectF);
     }
 
@@ -137,16 +137,10 @@ public class SegmentedBarView extends View {
     }
 
     private Paint getAppropriatePaint(final boolean isHomeTeam) {
-        Paint appropriatePaint = isHomeTeam ? homeRectPaint : awayRectPaint;
-        if (stat.getHomeTeamValue() == stat.getAwayTeamValue()) {
-            appropriatePaint = indifferentPaint;
-        }
-        return appropriatePaint;
+        return isHomeTeam ? homeRectPaint : awayRectPaint;
     }
 
-    private RectF getRectF(final boolean isHomeTeam, final int halfCompleteWidth) {
-        RectF rect = null;
-
+    private void drawRect(final boolean isHomeTeam, final int halfCompleteWidth) {
         final int top = 0;
         final int bottom = getHeight() - getPaddingBottom() - getPaddingTop();
 
@@ -155,9 +149,43 @@ public class SegmentedBarView extends View {
             final double left = getLeft(isHomeTeam, halfCompleteWidth, valueBarWidth);
             final double right = getRight(isHomeTeam, halfCompleteWidth, valueBarWidth);
 
-            rect = new RectF((float) left, top, (float) right, bottom);
+            setRectF(isHomeTeam, left, top, right, bottom);
         }
-        return rect;
+    }
+
+    private void setRectF(final boolean isHomeTeam, final double left, final int top, final double right, final int bottom) {
+        if (isAnimated) {
+            startDrawingAnimation(isHomeTeam, left, top, right, bottom);
+        } else {
+            final RectF rectF = new RectF((float) left, top, (float) right, bottom);
+            if (isHomeTeam) {
+                homeRectF = rectF;
+            } else {
+                awayRectF = rectF;
+            }
+        }
+    }
+
+    private void startDrawingAnimation(final boolean isHomeTeam, final double left, final int top, final double right, final int bottom) {
+        if (isHomeTeam && homeTeamValueAnimator == null) {
+            homeTeamValueAnimator = getAnimation(true, left, right, top, bottom);
+            homeTeamValueAnimator.start();
+        }
+
+        if (!isHomeTeam && awayTeamValueAnimator == null) {
+            awayTeamValueAnimator = getAnimation(false, left, right, top, bottom);
+            awayTeamValueAnimator.start();
+        }
+    }
+
+    private ValueAnimator getAnimation(final boolean isHomeTeam, final double left, final double right, final int top, final int bottom) {
+        ValueAnimator valueAnimator = isHomeTeam ?
+                ValueAnimator.ofFloat((float) right, (float) left) :
+                ValueAnimator.ofFloat((float) left, (float) right);
+        valueAnimator.setDuration(ANIMATION_DURATION);
+        valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        valueAnimator.addUpdateListener(new SegmentedAnimatorUpdateListener(isHomeTeam, left, right, top, bottom));
+        return valueAnimator;
     }
 
     private double getLeft(final boolean isHomeTeam, final int halfCompleteWidth, final double valueBarWidth) {
@@ -183,7 +211,7 @@ public class SegmentedBarView extends View {
     private double getValueBarWidth(final boolean isHomeTeam, final int halfCompleteWidth) {
         double valueBarWidth = 0;
         final double factor = getFactor(isHomeTeam);
-        if (factor != 0) {
+        if (factor > 0) {
             valueBarWidth = halfCompleteWidth / factor;
         }
         return valueBarWidth;
@@ -191,18 +219,25 @@ public class SegmentedBarView extends View {
 
     private double getFactor(final boolean isHomeTeam) {
         double factor = 1.;
-        switch (stat.getUnit()) {
-            case PERCENTAGE:
-                factor = isHomeTeam ?
-                        100d / stat.getHomeTeamValue() :
-                        100d / stat.getAwayTeamValue();
-                break;
-            case ABSOLUTE:
-                final double sumOfValues = (double) stat.getSum();
-                factor = isHomeTeam ?
-                        sumOfValues / stat.getHomeTeamValue() :
-                        sumOfValues / stat.getAwayTeamValue();
-                break;
+        final int homeTeamValue = stat.getHomeTeamValue();
+        final int awayTeamValue = stat.getAwayTeamValue();
+
+        try {
+            switch (stat.getUnit()) {
+                case PERCENTAGE:
+                    factor = isHomeTeam ?
+                            100d / homeTeamValue :
+                            100d / awayTeamValue;
+                    break;
+                case ABSOLUTE:
+                    final double sumOfValues = (double) stat.getSum();
+                    factor = isHomeTeam ?
+                            sumOfValues / homeTeamValue :
+                            sumOfValues / awayTeamValue;
+                    break;
+            }
+        } catch (Exception e) {
+            factor = 1.;
         }
         return factor;
     }
@@ -216,5 +251,36 @@ public class SegmentedBarView extends View {
     private float getSizeInPixels(final int typedValueType, final int typedValue) {
         return TypedValue.applyDimension(typedValueType, typedValue, getResources().getDisplayMetrics());
     }
-    //</editor-fold>
+//</editor-fold>
+
+//<editor-fold desc="Animator Update Listener">
+private class SegmentedAnimatorUpdateListener implements AnimatorUpdateListener {
+    private final boolean isHomeTeam;
+    private final double left;
+    private final double right;
+    private final int top;
+    private final int bottom;
+
+    public SegmentedAnimatorUpdateListener(final boolean isHomeTeam, final double left, final double right, final int top, final int bottom) {
+        this.isHomeTeam = isHomeTeam;
+        this.left = left;
+        this.right = right;
+        this.top = top;
+        this.bottom = bottom;
+    }
+
+    @Override
+    public void onAnimationUpdate(final ValueAnimator animation) {
+        if (isHomeTeam) {
+            final float animatedLeft = (float) animation.getAnimatedValue();
+            homeRectF = new RectF(animatedLeft, top, (float) right, bottom);
+            invalidate();
+        } else {
+            final float animatedRight = (float) animation.getAnimatedValue();
+            awayRectF = new RectF((float) left, top, animatedRight, bottom);
+            invalidate();
+        }
+    }
+}
+//</editor-fold>
 }

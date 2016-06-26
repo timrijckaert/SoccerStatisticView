@@ -5,33 +5,21 @@ package tim.rijckaert.be.library;
  */
 public class Stat {
 
-    enum Unit {
-        PERCENTAGE("%"),
-        ABSOLUTE("");
-
-        private final String extension;
-
-        Unit(final String extension) {
-            this.extension = extension;
-        }
-
-        public String getExtension() {
-            return extension;
-        }
-    }
-
     private final int sum;
     private String label;
     private int homeTeamValue;
     private int awayTeamValue;
     private Unit unit;
-
     public Stat(final String label, final int homeTeamValue, final int awayTeamValue, final boolean isPercentage) {
         this.label = label;
         this.homeTeamValue = homeTeamValue;
         this.awayTeamValue = awayTeamValue;
         this.sum = homeTeamValue + awayTeamValue;
         this.unit = isPercentage ? Unit.PERCENTAGE : Unit.ABSOLUTE;
+        if (isPercentage && sum != 100 && sum != 0) {
+            this.homeTeamValue = this.homeTeamValue * 100 / sum;
+            this.awayTeamValue = 100 - this.homeTeamValue;
+        }
     }
 
     public String getLabel() {
@@ -52,5 +40,20 @@ public class Stat {
 
     public int getSum() {
         return sum;
+    }
+
+    enum Unit {
+        PERCENTAGE("%"),
+        ABSOLUTE("");
+
+        private final String extension;
+
+        Unit(final String extension) {
+            this.extension = extension;
+        }
+
+        public String getExtension() {
+            return extension;
+        }
     }
 }
