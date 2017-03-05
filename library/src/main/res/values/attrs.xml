@@ -3,7 +3,6 @@
     <declare-styleable name="SegmentedBarView">
         <attr name="colorHomeTeam" format="color" />
         <attr name="colorAwayTeam" format="color" />
-        <attr name="colorIndifferent" format="color" />
         <attr name="colorFineLine" format="color" />
         <attr name="animated" format="boolean" />
     </declare-styleable>

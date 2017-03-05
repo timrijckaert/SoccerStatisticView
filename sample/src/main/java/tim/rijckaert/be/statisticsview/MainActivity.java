@@ -13,15 +13,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         StatisticView statisticsView = (StatisticView) findViewById(R.id.statisticsView);
-        statisticsView.setStat(new Stat("Balbezit", 95, 5, true));
+        statisticsView.setStat(new Stat("Balbezit", "AA Gent", 95, "RSCA Anderlecht", 5, true));
 
         StatisticView statisticsView2 = (StatisticView) findViewById(R.id.statisticsView2);
-        statisticsView2.setStat(new Stat("Ze zijn gelijk", 50, 50, true));
+        statisticsView2.setStat(new Stat("Ze zijn gelijk", "AA Gent", 50, "RSCA Anderlecht", 50, true));
 
         StatisticView statisticsView3 = (StatisticView) findViewById(R.id.statisticsView3);
-        statisticsView3.setStat(new Stat("Geen Percentage", 95, 5, false));
+        statisticsView3.setStat(new Stat("Geen Percentage", "AA Gent", 95, "RSCA Anderlecht", 5, false));
 
         StatisticView statisticsView4 = (StatisticView) findViewById(R.id.statisticsView4);
-        statisticsView4.setStat(new Stat("Iets Anders", 17, 50, false));
+        statisticsView4.setStat(new Stat("Iets Anders", "AA Gent", 17, "RSCA Anderlecht", 50, false));
     }
 }

@@ -42,7 +42,6 @@
         android:layout_height="match_parent"
         app:colorAwayTeam="#179191"
         app:colorFineLine="#F0EFEF"
-        app:colorHomeTeam="#7ED321"
-        app:colorIndifferent="#a4a4a4" />
+        app:colorHomeTeam="#7ED321" />
 
 </LinearLayout>

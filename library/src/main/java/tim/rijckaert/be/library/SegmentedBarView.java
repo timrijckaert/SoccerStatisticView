@@ -1,7 +1,6 @@
 package tim.rijckaert.be.library;
 
 import android.animation.ValueAnimator;
-import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -251,36 +250,36 @@ public class SegmentedBarView extends View {
     private float getSizeInPixels(final int typedValueType, final int typedValue) {
         return TypedValue.applyDimension(typedValueType, typedValue, getResources().getDisplayMetrics());
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold desc="Animator Update Listener">
-private class SegmentedAnimatorUpdateListener implements AnimatorUpdateListener {
-    private final boolean isHomeTeam;
-    private final double left;
-    private final double right;
-    private final int top;
-    private final int bottom;
+    //<editor-fold desc="Animator Update Listener">
+    private class SegmentedAnimatorUpdateListener implements ValueAnimator.AnimatorUpdateListener {
+        private final boolean isHomeTeam;
+        private final double left;
+        private final double right;
+        private final int top;
+        private final int bottom;
 
-    public SegmentedAnimatorUpdateListener(final boolean isHomeTeam, final double left, final double right, final int top, final int bottom) {
-        this.isHomeTeam = isHomeTeam;
-        this.left = left;
-        this.right = right;
-        this.top = top;
-        this.bottom = bottom;
-    }
+        public SegmentedAnimatorUpdateListener(final boolean isHomeTeam, final double left, final double right, final int top, final int bottom) {
+            this.isHomeTeam = isHomeTeam;
+            this.left = left;
+            this.right = right;
+            this.top = top;
+            this.bottom = bottom;
+        }
 
-    @Override
-    public void onAnimationUpdate(final ValueAnimator animation) {
-        if (isHomeTeam) {
-            final float animatedLeft = (float) animation.getAnimatedValue();
-            homeRectF = new RectF(animatedLeft, top, (float) right, bottom);
-            invalidate();
-        } else {
-            final float animatedRight = (float) animation.getAnimatedValue();
-            awayRectF = new RectF((float) left, top, animatedRight, bottom);
-            invalidate();
+        @Override
+        public void onAnimationUpdate(final ValueAnimator animation) {
+            if (isHomeTeam) {
+                final float animatedLeft = (float) animation.getAnimatedValue();
+                homeRectF = new RectF(animatedLeft, top, (float) right, bottom);
+                invalidate();
+            } else {
+                final float animatedRight = (float) animation.getAnimatedValue();
+                awayRectF = new RectF((float) left, top, animatedRight, bottom);
+                invalidate();
+            }
         }
     }
-}
-//</editor-fold>
+    //</editor-fold>
 }
