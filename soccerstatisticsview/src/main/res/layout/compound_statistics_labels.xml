@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/statisticsView_homeTeam_tv"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:gravity="center"
+        android:textSize="13sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/statisticsView_segmentedBarView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statisticsView_label_tv"
+        tools:text="60%" />
+
+    <TextView
+        android:id="@+id/statisticsView_label_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/statisticsView_segmentedBarView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Balbezit" />
+
+    <TextView
+        android:id="@+id/statisticsView_awayTeam_tv"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:gravity="center"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/statisticsView_segmentedBarView"
+        app:layout_constraintTop_toBottomOf="@+id/statisticsView_label_tv"
+        tools:text="140%" />
+
+
+    <tim.rijckaert.be.library.SegmentedBarView
+        android:id="@+id/statisticsView_segmentedBarView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
+        app:colorAwayTeam="#179191"
+        app:colorFineLine="#F0EFEF"
+        app:colorHomeTeam="#7ED321"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/statisticsView_awayTeam_tv"
+        app:layout_constraintStart_toEndOf="@+id/statisticsView_homeTeam_tv"
+        app:layout_constraintTop_toBottomOf="@+id/statisticsView_label_tv" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
